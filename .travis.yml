@@ -1,0 +1,10 @@
+language: java
+
+install:
+  - "./gradlew assemble"
+
+jdk:
+  - oraclejdk8
+
+notifications:
+  email: false
