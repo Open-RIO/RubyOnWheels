@@ -41,11 +41,11 @@ configurations {
 }
 
 dependencies {
-  compile group: 'jaci.openrio.toast', name: 'Toast', version: '0.5.0'    //Change this line to update Toast
+  compile group: 'jaci.openrio.toast', name: 'Toast', version: '1.0.0'    //Change this line to update Toast
   compile group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
   buildJars group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
 }
 
 jar {
-	from configurations.buildJars.collect { println it; it.isDirectory() ? it : zipTree(it) }
+	from configurations.buildJars.collect { it.isDirectory() ? it : zipTree(it) }
 }
