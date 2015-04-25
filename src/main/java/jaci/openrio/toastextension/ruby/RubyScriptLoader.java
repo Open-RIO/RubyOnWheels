@@ -1,24 +1,21 @@
 package jaci.openrio.toastextension.ruby;
 
+import jaci.openrio.toast.core.Toast;
 import jaci.openrio.toast.core.ToastBootstrap;
 import jaci.openrio.toast.core.command.CommandBus;
 import jaci.openrio.toast.core.io.usb.MassStorageDevice;
 import jaci.openrio.toast.core.io.usb.USBMassStorage;
 import jaci.openrio.toast.lib.log.Logger;
-import org.jruby.*;
-import org.jruby.embed.PathType;
+import org.jruby.Ruby;
 import org.jruby.embed.ScriptingContainer;
-import org.jruby.javasupport.proxy.InternalJavaProxy;
-import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.runtime.load.LoadService;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
- * The Ruby Script loader. Ruby scripts are loaded and instantiated by this class
+ * The Ruby Script loader. Ruby scripts are loaded and instantiated by this class. The classes that are loaded
+ * are defined in the RubyOnWheels.groovy configuration file
  *
  * @author Jaci
  */
@@ -27,13 +24,11 @@ public class RubyScriptLoader {
     static File rootDir;
 
     static ScriptingContainer container;
-    public static HashMap<File, RubyObject> gems;
 
     static Logger logger;
 
     public static void init() {
         container = new ScriptingContainer();
-        gems = new HashMap<>();
 
         rootDir = new File(ToastBootstrap.toastHome, "ruby");
         rootDir.mkdirs();
@@ -43,60 +38,34 @@ public class RubyScriptLoader {
         Ruby rb = container.getProvider().getRuntime();
         LoadService ls = rb.getLoadService();
         ls.addPaths("uri:classloader:/jaci/ruby/requires");
-        ls.autoloadRequire("Load");
+        //ls.autoloadRequire("LoadToast");
 
         CommandBus.registerCommand(new RubyScriptCommand());
 
-        if (!USBMassStorage.overridingModules())
-            crawl(rootDir);
+        if (!USBMassStorage.overridingModules()) {
+            ls.addPaths(rootDir.toURI().toString());
+        }
 
         for (MassStorageDevice device : USBMassStorage.connectedDevices) {
             if (device.concurrent_modules || device.override_modules) {
                 File ruby = new File(device.drivePath, "ruby");
                 ruby.mkdirs();
-                crawl(ruby);
+                ls.addPaths(ruby.toURI().toString());
             }
         }
-    }
 
-    public static void crawl(File dir) {
-        File[] ruby = dir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".rb");
-            }
-        });
-
-        File[] subDirectories = dir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return new File(dir, name).isDirectory();
-            }
-        });
-
-        for (File rb : ruby)
-            loadRuby(rb);
-        for (File sub : subDirectories)
-            crawl(sub);
-    }
-
-    public static void loadRuby(File file) {
-        Object rb = container.runScriptlet(PathType.ABSOLUTE, file.getAbsolutePath());
-        if (rb instanceof InternalJavaProxy) {
-            InternalJavaProxy proxy = (InternalJavaProxy) rb;
-            rb = proxy.___getInvocationHandler().getOrig();
-        }
-        if (rb instanceof RubyObject) {
-            RubyObject gem = (RubyObject) rb;
-            gems.put(file, gem);
-
-            logger.info("Ruby File Loaded: " + file.getName());
-
+        container.put("LOG_", logger);
+        container.put("TOAST_", Toast.getToast());
+        ArrayList<String> filenames = (ArrayList<String>) ConfigurationManager.Properties.LOAD_FILES.get();
+        for (String s : filenames) {
             try {
-                gem.callMethod("init");
-            } catch (Exception e) { }
+                container.runScriptlet("load '" + s + "'");
+                logger.info("Ruby File Loaded: " + s);
+            } catch (Exception e) {
+                logger.error("Could not load Ruby File: " + s);
+                logger.exception(e);
+            }
         }
-
     }
 
 }

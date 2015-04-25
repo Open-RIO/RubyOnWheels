@@ -9,6 +9,7 @@ import jaci.openrio.toast.lib.module.ToastModule;
  * @author Jaci
  */
 public class RubyOnWheels extends ToastModule {
+
     @Override
     public String getModuleName() {
         return "RubyOnWheels";
@@ -21,8 +22,10 @@ public class RubyOnWheels extends ToastModule {
 
     @Override
     public void prestart() {
+        ConfigurationManager.init();
         new Thread() {
             public void run() {
+                setName("Ruby");
                 RubyScriptLoader.init();
             }
         }.start();
@@ -31,4 +34,5 @@ public class RubyOnWheels extends ToastModule {
     @Override
     public void start() {
     }
+
 }
