@@ -12,7 +12,7 @@ buildscript {
   }
   }
   dependencies {
-    classpath group: 'jaci.openrio.gradle', name: 'GradleRIO', version: '1.1.6', classifier: 'Toast'			//Change this line if you wish to Update GradleRIO
+    classpath group: 'jaci.openrio.gradle', name: 'GradleRIO', version: '+', classifier: 'Toast'			//Change this line if you wish to Update GradleRIO
   }
 }
 
@@ -41,7 +41,7 @@ configurations {
 }
 
 dependencies {
-  compile group: 'jaci.openrio.toast', name: 'Toast', version: '1.0.0'    //Change this line to update Toast
+  compile group: 'jaci.openrio.toast', name: 'Toast', version: '+'    //Change this line to update Toast
   compile group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
   buildJars group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
 }
