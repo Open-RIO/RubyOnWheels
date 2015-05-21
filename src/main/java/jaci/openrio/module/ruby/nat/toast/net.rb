@@ -3,6 +3,10 @@ module Toast
   java_import "jaci.openrio.delegate.BoundDelegate"
   java_import "jaci.openrio.delegate.Security"
 
+  def self.network delegate_id, &connection_callback
+    Net.new delegate_id, &connection_callback
+  end
+
   class Net
 
     def initialize delegate_id, &callback

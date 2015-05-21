@@ -8,6 +8,10 @@ module Toast
   java_import "jaci.openrio.toast.core.thread.ToastThreadPool"
   java_import "jaci.openrio.toast.lib.state.LoadPhase"
 
+  module WPI
+    include_package "edu.wpi.first.wpilibj"
+  end
+
   def self.shutdown method=:safe
     if method == :crash
       TOAST_.shutdownCrash
@@ -64,10 +68,6 @@ module Toast
     ToastThreadPool.INSTANCE.submit {
       block.call
     }
-  end
-
-  def self.command name, &block
-    Command.new name, &block
   end
 
   def self.FMS?

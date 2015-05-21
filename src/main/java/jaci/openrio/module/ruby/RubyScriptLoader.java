@@ -5,6 +5,7 @@ import jaci.openrio.toast.core.ToastBootstrap;
 import jaci.openrio.toast.core.command.CommandBus;
 import jaci.openrio.toast.core.io.usb.MassStorageDevice;
 import jaci.openrio.toast.core.io.usb.USBMassStorage;
+import jaci.openrio.toast.lib.crash.CrashHandler;
 import jaci.openrio.toast.lib.log.Logger;
 import org.jruby.Ruby;
 import org.jruby.embed.LocalContextScope;
@@ -68,7 +69,7 @@ public class RubyScriptLoader {
                 logger.info("Ruby File Loaded: " + s);
             } catch (Exception e) {
                 logger.error("Could not load Ruby File: " + s);
-                logger.exception(e);
+                CrashHandler.handle(e);
             }
         }
     }
