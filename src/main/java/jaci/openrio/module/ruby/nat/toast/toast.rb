@@ -6,6 +6,7 @@ module Toast
   java_import "jaci.openrio.toast.core.thread.Heartbeat"
   java_import "jaci.openrio.toast.core.thread.HeartbeatListener"
   java_import "jaci.openrio.toast.core.thread.ToastThreadPool"
+  java_import "jaci.openrio.toast.lib.state.LoadPhase"
 
   def self.shutdown method=:safe
     if method == :crash
@@ -42,6 +43,13 @@ module Toast
     }
   end
 
+  def self.loadphase &block
+    LoadPhase.addCallback java.util.function.Function.impl { |method, phase|
+      block.call phase.to_s.downcase.to_sym
+      java.lang.Void
+    }
+  end
+
   def self.heartbeat &block
     Heartbeat.add HeartbeatListener.impl { |method, skipped|
       block.call skipped
@@ -60,6 +68,22 @@ module Toast
 
   def self.command name, &block
     Command.new name, &block
+  end
+
+  def self.FMS?
+     Environment.isCompetition
+  end
+
+  def self.simulation?
+    Environment.isSimulation
+  end
+
+  def self.verification?
+    Environment.isVerification
+  end
+
+  def self.embedded?
+    Environment.isEmbedded
   end
 
 end

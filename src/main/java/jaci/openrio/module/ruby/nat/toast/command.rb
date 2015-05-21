@@ -1,6 +1,6 @@
 module Toast
   java_import "jaci.openrio.toast.core.command.CommandBus"
-  java_import "jaci.openrio.module.ruby.nat.AbstractCommandProxy"
+  java_import "jaci.openrio.module.ruby.util.AbstractCommandProxy"
 
   class Command
 
