@@ -54,14 +54,6 @@ module Toast
     def << value
       set(value)
     end
-
-    def + value
-      set(get() + value)
-    end
-
-    def - value
-      set(get() - value)
-    end
   end
 
   class Drive < WPI::RobotDrive
