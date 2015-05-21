@@ -1,5 +1,6 @@
 package jaci.openrio.module.ruby;
 
+import jaci.openrio.toast.core.loader.annotation.Priority;
 import jaci.openrio.toast.lib.module.ToastModule;
 
 /**
@@ -21,6 +22,7 @@ public class RubyOnWheels extends ToastModule {
     }
 
     @Override
+    @Priority(level = Priority.Level.LOWEST)
     public void prestart() {
         ConfigurationManager.init();
         RubyScriptLoader.init();

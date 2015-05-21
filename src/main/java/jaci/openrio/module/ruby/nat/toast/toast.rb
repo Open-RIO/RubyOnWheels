@@ -3,6 +3,9 @@ module Toast
   java_import "jaci.openrio.toast.core.Environment"
   java_import "jaci.openrio.toast.core.StateTracker"
   java_import "jaci.openrio.toast.lib.state.StateListener"
+  java_import "jaci.openrio.toast.core.thread.Heartbeat"
+  java_import "jaci.openrio.toast.core.thread.HeartbeatListener"
+  java_import "jaci.openrio.toast.core.thread.ToastThreadPool"
 
   def self.shutdown method=:safe
     if method == :crash
@@ -30,11 +33,28 @@ module Toast
   end
 
   def self.transition filter=:all, &block
-    StateTracker.addTicker StateListener::Transition.impl { |method, tickstate|
+    StateTracker.addTransition StateListener::Transition.impl { |method, tickstate, oldstate|
       state = tickstate.to_s.downcase.to_sym
+      old = oldstate.to_s.downcase.to_sym
       if filter == :all || filter == state
-        block.call state
+        block.call state, old
       end
+    }
+  end
+
+  def self.heartbeat &block
+    Heartbeat.add HeartbeatListener.impl { |method, skipped|
+      block.call skipped
+    }
+  end
+
+  # Ambiguity~~
+  class ToastThreadPool
+    java_alias :submit, :addWorker, [java.util.concurrent.Callable.java_class]
+  end
+  def self.go &block
+    ToastThreadPool.INSTANCE.submit {
+      block.call
     }
   end
 
