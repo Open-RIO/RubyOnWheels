@@ -1,3 +1,5 @@
 require 'java'
-require 'toast/toast'
+require 'toast/command'
+require 'toast/net'
 require 'toast/log'
+require 'toast/toast'

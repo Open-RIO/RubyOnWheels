@@ -58,4 +58,8 @@ module Toast
     }
   end
 
+  def self.command name, &block
+    Command.new name, &block
+  end
+
 end

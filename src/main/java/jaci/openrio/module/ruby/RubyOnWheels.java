@@ -1,6 +1,8 @@
 package jaci.openrio.module.ruby;
 
 import jaci.openrio.toast.core.loader.annotation.Priority;
+import jaci.openrio.toast.core.shared.ModuleEventBus;
+import jaci.openrio.toast.core.shared.ModuleEventListener;
 import jaci.openrio.toast.lib.module.ToastModule;
 
 /**
@@ -9,7 +11,7 @@ import jaci.openrio.toast.lib.module.ToastModule;
  *
  * @author Jaci
  */
-public class RubyOnWheels extends ToastModule {
+public class RubyOnWheels extends ToastModule implements ModuleEventListener {
 
     @Override
     public String getModuleName() {
@@ -21,8 +23,12 @@ public class RubyOnWheels extends ToastModule {
         return "1.0.0";
     }
 
+    public void onConstruct() {
+        ModuleEventBus.registerListener(this);
+    }
+
     @Override
-    @Priority(level = Priority.Level.LOWEST)
+    @Priority(level = Priority.Level.HIGHEST)
     public void prestart() {
         ConfigurationManager.init();
         RubyScriptLoader.init();
@@ -32,4 +38,12 @@ public class RubyOnWheels extends ToastModule {
     public void start() {
     }
 
+    @Override
+    public void onModuleEvent(String sender, String event_type, Object... data) {
+        // Register with event_type being 'row_rb' and data[0] begin 'your.ruby.package'
+        if (event_type.equals("row_rb")) {
+            String rb_path = (String) data[0];
+            RubyScriptLoader.add(rb_path);
+        }
+    }
 }

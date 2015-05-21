@@ -26,8 +26,9 @@ public class RubyScriptLoader {
     static File rootDir;
 
     static ScriptingContainer container;
-
     static Logger logger;
+
+    static ArrayList<String> loadQueue = new ArrayList<>();
 
     public static void init() {
         container = new ScriptingContainer();
@@ -40,6 +41,8 @@ public class RubyScriptLoader {
         Ruby rb = container.getProvider().getRuntime();
         LoadService ls = rb.getLoadService();
         ls.addPaths("uri:classloader:/jaci/openrio/module/ruby/nat");
+        for (String s : loadQueue)
+            ls.addPaths(s);
         ls.autoloadRequire("toast");
 
         CommandBus.registerCommand(new RubyScriptCommand());
@@ -67,6 +70,15 @@ public class RubyScriptLoader {
                 logger.error("Could not load Ruby File: " + s);
                 logger.exception(e);
             }
+        }
+    }
+
+    public static void add(String path) {
+        String cl = "uri:classloader:/" + path.replace(".", "/");
+        if (container != null) {
+            container.getProvider().getRuntime().getLoadService().addPaths(cl);
+        } else {
+            loadQueue.add(path);
         }
     }
 
