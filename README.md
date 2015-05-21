@@ -2,7 +2,7 @@
 The Toast Module that allows you to code in Ruby!  
 
 Travis CI Build Status:  
-[![Build status](http://dev.imjac.in/travisalt/Open-RIO/ToastAPI)](https://travis-ci.org/Open-RIO/RubyOnWheels/)
+[![Build status](http://dev.imjac.in/travisalt/Open-RIO/RubyOnWheels)](https://travis-ci.org/Open-RIO/RubyOnWheels/)
 ## An Introduction  
 Ruby on Wheels is a Toast Module that allows loading and compiling of Ruby scripts into the classpath, much like the inbuilt Groovy support. This is made possible by the [JRuby](http://github.com/jruby/jruby) API. A simple Ruby file to be loaded by RubyOnWheels is shown below:
 ```ruby
