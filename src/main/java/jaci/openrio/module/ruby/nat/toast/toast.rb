@@ -12,6 +12,18 @@ module Toast
     include_package "edu.wpi.first.wpilibj"
   end
 
+  class Controller < WPI::Joystick
+  end
+
+  class DigitalInput < WPI::DigitalInput
+  end
+
+  class DigitalOutput < WPI::DigitalOutput
+  end
+
+  class Encoder < WPI::Encoder
+  end
+
   def self.shutdown method=:safe
     if method == :crash
       TOAST_.shutdownCrash
@@ -51,6 +63,14 @@ module Toast
     LoadPhase.addCallback java.util.function.Function.impl { |method, phase|
       block.call phase.to_s.downcase.to_sym
       java.lang.Void
+    }
+  end
+
+  def self.start &block
+    loadphase {
+      if phase == :start
+        block.call
+      end
     }
   end
 

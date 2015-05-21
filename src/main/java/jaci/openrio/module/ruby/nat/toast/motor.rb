@@ -53,7 +53,7 @@ module Toast
     end
 
     def polar *args
-      mecanumDrive_Polar args
+      mecanumDrive_Polar *args
     end
 
     def cartesian x, y, rotation, gyro=0
