@@ -40,6 +40,10 @@ configurations {
 	buildJars
 }
 
+def robotManifest = {
+  attributes 'Toast-Plugin-Class': 'jaci.openrio.module.ruby.RubyOnWheels'
+}
+
 dependencies {
   compile group: 'jaci.openrio.toast', name: 'Toast', version: '+'    //Change this line to update Toast
   compile group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
@@ -47,5 +51,6 @@ dependencies {
 }
 
 jar {
+	manifest robotManifest
 	from configurations.buildJars.collect { it.isDirectory() ? it : zipTree(it) }
 }
