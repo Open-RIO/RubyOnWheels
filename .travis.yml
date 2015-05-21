@@ -3,8 +3,17 @@ language: java
 install:
   - "./gradlew assemble"
 
+script:
+  - "./gradlew verify"
+
 jdk:
   - oraclejdk8
 
 notifications:
   email: false
+
+cards:
+  enabled:
+    - "master"
+    - "development"
+  title: "Ruby On Wheels"
