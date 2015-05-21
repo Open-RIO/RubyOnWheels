@@ -1,4 +1,4 @@
-package jaci.openrio.toastextension.ruby;
+package jaci.openrio.module.ruby;
 
 import jaci.openrio.toast.lib.module.ToastModule;
 
@@ -23,12 +23,7 @@ public class RubyOnWheels extends ToastModule {
     @Override
     public void prestart() {
         ConfigurationManager.init();
-        new Thread() {
-            public void run() {
-                setName("Ruby");
-                RubyScriptLoader.init();
-            }
-        }.start();
+        RubyScriptLoader.init();
     }
 
     @Override

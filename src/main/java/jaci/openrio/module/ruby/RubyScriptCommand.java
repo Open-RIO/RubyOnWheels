@@ -1,4 +1,4 @@
-package jaci.openrio.toastextension.ruby;
+package jaci.openrio.module.ruby;
 
 import jaci.openrio.toast.core.command.AbstractCommand;
 

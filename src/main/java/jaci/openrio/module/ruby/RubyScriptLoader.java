@@ -1,4 +1,4 @@
-package jaci.openrio.toastextension.ruby;
+package jaci.openrio.module.ruby;
 
 import jaci.openrio.toast.core.Toast;
 import jaci.openrio.toast.core.ToastBootstrap;
@@ -7,6 +7,8 @@ import jaci.openrio.toast.core.io.usb.MassStorageDevice;
 import jaci.openrio.toast.core.io.usb.USBMassStorage;
 import jaci.openrio.toast.lib.log.Logger;
 import org.jruby.Ruby;
+import org.jruby.embed.LocalContextScope;
+import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.runtime.load.LoadService;
 
@@ -33,12 +35,12 @@ public class RubyScriptLoader {
         rootDir = new File(ToastBootstrap.toastHome, "ruby");
         rootDir.mkdirs();
 
-        logger = new Logger("RubyOnWheels", Logger.ATTR_DEFAULT);
+        logger = new Logger("Ruby", Logger.ATTR_DEFAULT);
 
         Ruby rb = container.getProvider().getRuntime();
         LoadService ls = rb.getLoadService();
-        ls.addPaths("uri:classloader:/jaci/ruby/requires");
-        //ls.autoloadRequire("LoadToast");
+        ls.addPaths("uri:classloader:/jaci/openrio/module/ruby/nat");
+        ls.autoloadRequire("toast");
 
         CommandBus.registerCommand(new RubyScriptCommand());
 
