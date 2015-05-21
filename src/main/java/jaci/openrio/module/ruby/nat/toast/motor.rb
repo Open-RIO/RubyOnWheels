@@ -4,6 +4,10 @@ module Toast
     Motor.new type, interface, channel
   end
 
+  def self.drive c1, c2, c3=nil, c4=nil
+    Drive.new c1, c2, c3, c4
+  end
+
   class Motor
 
     # Actually just gives a reference to WPILib's SpeedController child classes, but makes it cleaner in Ruby Implementations
@@ -40,6 +44,30 @@ module Toast
 
       raise "Invalid Interface"
     end
+  end
+
+  class Drive < WPI::RobotDrive
+
+    def tank *args
+      tankDrive *args
+    end
+
+    def polar *args
+      mecanumDrive_Polar args
+    end
+
+    def cartesian x, y, rotation, gyro=0
+      mecanumDrive_Cartesian x, y, rotation, gyro
+    end
+
+    def mecanum x, y, rotation, gyro=0
+      cartesian x, y, rotation, gyro
+    end
+
+    def stop
+      stopMotor
+    end
 
   end
+
 end
