@@ -16,4 +16,4 @@ cards:
   enabled:
     - "master"
     - "development"
-  title: "Ruby On Wheels"
+  title: "Ruby"
