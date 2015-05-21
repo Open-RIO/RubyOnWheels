@@ -18,31 +18,49 @@ module Toast
       case type
       when :talon
         if pwm
-          return WPI::Talon.new channel
+          @sc = WPI::Talon.new channel
         elsif can
-          return WPI::CANTalon.new channel
+          @sc = WPI::CANTalon.new channel
         end
       when :srx
         if pwm
-          return WPI::TalonSRX.new channel
+          @sc = WPI::TalonSRX.new channel
         elsif can
-          return WPI::CANTalon.new channel    # For some reason this is how WPILIb handles their SRX :L
+          @sc = WPI::CANTalon.new channel    # For some reason this is how WPILIb handles their SRX :L
         end
       when :jaguar
         if pwm
-          return WPI::Jaguar.new channel
+          @sc = WPI::Jaguar.new channel
         elsif can
-          return WPI::CANJaguar.new channel
+          @sc = WPI::CANJaguar.new channel
         end
       when :victor
-        return WPI::Victor.new channel if pwm
+        @sc = WPI::Victor.new channel if pwm
       when :victorsp
-        return WPI::VictorSP.new channel if pwm
+        @sc = WPI::VictorSP.new channel if pwm
       else
         raise "Speed Controller not Supported"
       end
 
+      if @sc != nil
+        return @sc
+      end
+
       raise "Invalid Interface"
+    end
+  end
+
+  module Java::EduWpiFirstWpilibj::SpeedController
+    def << value
+      set(value)
+    end
+
+    def + value
+      set(get() + value)
+    end
+
+    def - value
+      set(get() - value)
     end
   end
 
