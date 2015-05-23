@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class RubyScriptLoader {
 
     static File rootDir;
+    static File gemDir;
 
     static ScriptingContainer container;
     static Logger logger;
@@ -34,6 +35,8 @@ public class RubyScriptLoader {
 
         rootDir = new File(ToastBootstrap.toastHome, "ruby");
         rootDir.mkdirs();
+        gemDir = new File(rootDir, "gems");
+        gemDir.mkdirs();
 
         logger = new Logger("Ruby", Logger.ATTR_DEFAULT);
 
@@ -48,13 +51,17 @@ public class RubyScriptLoader {
 
         if (!USBMassStorage.overridingModules()) {
             ls.addPaths(rootDir.toURI().toString());
+            ls.addPaths(gemDir.toURI().toString());
         }
 
         for (MassStorageDevice device : USBMassStorage.connectedDevices) {
             if (device.concurrent_modules || device.override_modules) {
                 File ruby = new File(device.drivePath, "ruby");
+                File gems = new File(ruby, "gems");
                 ruby.mkdirs();
+                gems.mkdirs();
                 ls.addPaths(ruby.toURI().toString());
+                ls.addPaths(gems.toURI().toString());
             }
         }
 
