@@ -8,8 +8,6 @@ import jaci.openrio.toast.core.io.usb.USBMassStorage;
 import jaci.openrio.toast.lib.crash.CrashHandler;
 import jaci.openrio.toast.lib.log.Logger;
 import org.jruby.Ruby;
-import org.jruby.embed.LocalContextScope;
-import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.runtime.load.LoadService;
 
@@ -79,7 +77,31 @@ public class RubyScriptLoader {
         if (container != null) {
             container.getProvider().getRuntime().getLoadService().addPaths(cl);
         } else {
+            loadQueue.add(cl);
+        }
+    }
+
+    public static void addRaw(String path) {
+        if (container != null) {
+            container.getProvider().getRuntime().getLoadService().addPaths(path);
+        } else {
             loadQueue.add(path);
+        }
+    }
+
+    public static void addGems(String path) {
+        if ((boolean)ConfigurationManager.Properties.LOAD_GEMS.get()) {
+            logger.info("Loading system Gem Dir: " + path);
+            File file = new File(path);
+            File[] gems = file.listFiles();
+            if (gems != null)
+                for (File gemDir : gems) {
+                    if (container != null) {
+                        container.getProvider().getRuntime().getLoadService().addPaths(new File(gemDir, "lib").toURI().toString());
+                    } else {
+                        loadQueue.add(new File(gemDir, "lib").toURI().toString());
+                    }
+                }
         }
     }
 

@@ -22,6 +22,7 @@ public class ConfigurationManager {
 
     public static enum Properties {
         LOAD_FILES("ruby.load.files", new String[] {"main.rb"}, "An Array of all the ruby files to load and instantiate at runtime. These are based from toast/ruby/, and all runtime instantiations should be defined here."),
+        LOAD_GEMS("ruby.load.gems", true, "Should we load System Ruby Gems? These gems come from your local Ruby installation and will be added to the load path for you to access. You almost always want this to be true")
         ;
 
         String key;
