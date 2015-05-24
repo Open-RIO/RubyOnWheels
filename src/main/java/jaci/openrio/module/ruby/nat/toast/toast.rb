@@ -12,6 +12,10 @@ module Toast
     include_package "edu.wpi.first.wpilibj"
   end
 
+  module Toast
+    include_package 'jaci.openrio.toast'
+  end
+
   class Controller < WPI::Joystick
   end
 
