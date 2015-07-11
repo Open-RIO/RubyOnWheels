@@ -1,16 +1,22 @@
 package jaci.openrio.module.ruby;
 
 import jaci.openrio.toast.core.command.AbstractCommand;
+import jaci.openrio.toast.core.command.IHelpable;
 
 /**
  * A command used for on-the-fly Ruby Scripting
  *
  * @author Jaci
  */
-public class RubyScriptCommand extends AbstractCommand {
+public class RubyScriptCommand extends AbstractCommand implements IHelpable {
     @Override
     public String getCommandName() {
         return "ruby";
+    }
+
+    @Override
+    public String getHelp() {
+        return "Run a given Ruby Script instantly";
     }
 
     @Override

@@ -95,21 +95,4 @@ public class RubyScriptLoader {
             loadQueue.add(path);
         }
     }
-
-    public static void addGems(String path) {
-        if ((boolean)ConfigurationManager.Properties.LOAD_GEMS.get()) {
-            logger.info("Loading system Gem Dir: " + path);
-            File file = new File(path);
-            File[] gems = file.listFiles();
-            if (gems != null)
-                for (File gemDir : gems) {
-                    if (container != null) {
-                        container.getProvider().getRuntime().getLoadService().addPaths(new File(gemDir, "lib").toURI().toString());
-                    } else {
-                        loadQueue.add(new File(gemDir, "lib").toURI().toString());
-                    }
-                }
-        }
-    }
-
 }

@@ -1,42 +1,39 @@
 package jaci.openrio.module.ruby;
 
-import jaci.openrio.toast.core.loader.groovy.GroovyPreferences;
 import jaci.openrio.toast.lib.math.MathHelper;
+import jaci.openrio.toast.lib.module.ModuleConfig;
 
 /**
- * The configuration file manager for RubyOnWheels, this class loads the RubyOnWheels.groovy preferences file and handles
+ * The configuration file manager for RubyOnWheels, this class loads the RubyOnWheels.conf preferences file and handles
  * registration of the properties.
  *
  * @author Jaci
  */
 public class ConfigurationManager {
 
-    static GroovyPreferences pref;
+    static ModuleConfig pref;
 
     public static void init() {
-        pref = new GroovyPreferences("RubyOnWheels");
+        pref = new ModuleConfig("RubyOnWheels");
 
         for (Properties prop : Properties.values())
             prop.init(pref);
     }
 
     public static enum Properties {
-        LOAD_FILES("ruby.load.files", new String[] {"main.rb"}, "An Array of all the ruby files to load and instantiate at runtime. These are based from toast/ruby/, and all runtime instantiations should be defined here."),
-        LOAD_GEMS("ruby.load.gems", true, "Should we load System Ruby Gems? These gems come from your local Ruby installation and will be added to the load path for you to access. You almost always want this to be true")
+        LOAD_FILES("ruby.load.files", new String[] {"main.rb"}),
         ;
 
         String key;
         Object defaultValue, value;
-        String[] comment;
 
-        Properties(String key, Object defaultValue, String comment) {
+        Properties(String key, Object defaultValue) {
             this.key = key;
             this.defaultValue = defaultValue;
-            this.comment = MathHelper.splitStringByWords(comment, 15);
         }
 
-        public Object init(GroovyPreferences preferences) {
-            value = preferences.getObject(key, defaultValue, comment);
+        public Object init(ModuleConfig preferences) {
+            value = preferences.get(key, defaultValue);
             return value;
         }
 
