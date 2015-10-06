@@ -7,6 +7,7 @@ import jaci.openrio.toast.core.io.usb.MassStorageDevice;
 import jaci.openrio.toast.core.io.usb.USBMassStorage;
 import jaci.openrio.toast.lib.crash.CrashHandler;
 import jaci.openrio.toast.lib.log.Logger;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import org.jruby.Ruby;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.runtime.load.LoadService;
@@ -67,14 +68,13 @@ public class RubyScriptLoader {
 
         container.put("LOG_", logger);
         container.put("TOAST_", Toast.getToast());
-        ArrayList<String> filenames = (ArrayList<String>) ConfigurationManager.Properties.LOAD_FILES.get();
+        String[] filenames = ConfigurationManager.pref.getArray(ConfigurationManager.Properties.LOAD_FILES.key, new String[] {"main.rb"});
         for (String s : filenames) {
             try {
                 container.runScriptlet("load '" + s + "'");
                 logger.info("Ruby File Loaded: " + s);
             } catch (Exception e) {
                 logger.error("Could not load Ruby File: " + s);
-                CrashHandler.handle(e);
             }
         }
     }

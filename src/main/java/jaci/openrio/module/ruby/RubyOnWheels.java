@@ -30,8 +30,10 @@ public class RubyOnWheels extends ToastModule implements ModuleEventListener {
     @Override
     @Priority(level = Priority.Level.LOWEST)
     public void prestart() {
-        ConfigurationManager.init();
-        RubyScriptLoader.init();
+        try {
+            ConfigurationManager.init();
+            RubyScriptLoader.init();
+        } catch (Exception e) { }
     }
 
     @Override

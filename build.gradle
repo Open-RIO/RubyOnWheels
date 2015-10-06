@@ -1,7 +1,3 @@
-/**
-This is the default build.gradle for Toast modules
-@author Jaci
-*/
 
 buildscript {
   repositories {
@@ -45,7 +41,7 @@ def robotManifest = {
 }
 
 dependencies {
-  compile group: 'jaci.openrio.toast', name: 'Toast', version: '+'    //Change this line to update Toast
+  compile group: 'jaci.openrio.toast', name: 'Toast-pre', version: '+' 
   compile group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
   buildJars group: 'org.jruby', name: 'jruby-core', version: '9.0.0.0.pre1'
 }
